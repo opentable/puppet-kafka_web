@@ -1,0 +1,101 @@
+#!/bin/sh
+
+[ -r /etc/default/kafka-web ] && . /etc/default/kafka-web
+
+NAME=kafka-web
+PID_FILE=${KAFKA_WEB_HOME}/RUNNING_PID
+
+DAEMON="${PLAY_HOME}/activator"
+DAEMON_OPTS="${JAVA_OPTS}"
+LOG_FILE="/var/log/kafka-web.log"
+
+start() {
+  if [ -f $PID_FILE ]
+    then
+        echo "\n$PID_FILE exists, process is already running or crashed"
+        exit 0
+    else
+        cd $KAFKA_WEB_HOME
+        exec $DAEMON $DAEMON_OPTS >> $LOG_FILE 2>&1 &
+
+        TIMEOUT=$((`date +%s`+60))
+        COUNTER=`date +%s`
+        while true; do
+          line=$(tail -n1 $LOG_FILE)
+          case "$line" in
+             *"Application started"*)
+	             echo "\tStarted"
+               break
+               ;;
+             *"Killed"*)
+               echo "\tKilled"
+               break
+               ;;
+             *)
+               if [ $COUNTER -ge $TIMEOUT ]; then
+                 echo "\tTimed Out"
+                 break
+               fi
+               ;;
+          esac
+        done
+
+        echo $! > $PID_FILE;
+    fi
+}
+
+stop() {
+  if [ ! -f $PID_FILE ]
+  then
+    echo "\n$PID_FILE does not exist, process is not running"
+    exit 1
+  else
+    kill -9 `cat $PID_FILE`;
+    rm -f $PID_FILE;
+    echo "\n$NAME stopped"
+    exit 0
+  fi
+}
+
+status() {
+  if [ -f $PID_FILE ]
+  then
+    PID=`cat $PID_FILE`
+    if [ -z "`ps -ef | awk '{print $2}' | grep "^$PID$"`" ]
+    then
+      echo "$NAME stopped but pid file exists"
+      exit 1
+    else
+      echo "$NAME running with pid $PID"
+      exit 0
+    fi
+  else
+    echo "$NAME stopped"
+    exit 1
+  fi
+}
+
+case "$1" in
+  status)
+    status
+	;;
+  start)
+    echo -n "Starting daemon: "$NAME
+    start
+	;;
+  stop)
+    echo -n "Stopping daemon: "$NAME
+    stop
+	;;
+  restart)
+    echo -n "Restarting daemon: "$NAME
+	  stop
+    start
+	;;
+
+  *)
+	echo "Usage: "$1" {status|start|stop|restart}"
+	exit 1
+esac
+
+exit 0
