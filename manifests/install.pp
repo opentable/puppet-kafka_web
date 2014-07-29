@@ -18,8 +18,9 @@ class kafka_web::install(
 
   if "x${jdbc_file}x" != "xx" {
     file { "${install_dir}/lib/${jdbc_file}":
-      ensure => link,
-      target => "/usr/share/java/${jdbc_file}"
+      ensure  => link,
+      target  => "/usr/share/java/${jdbc_file}",
+      require => Vcsrepo["$install_dir"]
     }
   }
 }
