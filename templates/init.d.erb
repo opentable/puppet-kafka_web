@@ -16,7 +16,7 @@ start() {
         exit 0
     else
         cd $KAFKA_WEB_HOME
-        exec $DAEMON $DAEMON_OPTS >> $LOG_FILE 2>&1 &
+        exec $DAEMON $DAEMON_OPTS start >> $LOG_FILE 2>&1 &
 
         TIMEOUT=$((`date +%s`+60))
         COUNTER=`date +%s`
