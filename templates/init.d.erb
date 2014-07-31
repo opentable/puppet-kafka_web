@@ -25,22 +25,21 @@ start() {
           case "$line" in
              *"Application started"*)
 	             echo "\tStarted"
-               break
+               echo $! > $PID_FILE;
+               exit 0
                ;;
              *"Killed"*)
                echo "\tKilled"
-               break
+               exit 1
                ;;
              *)
                if [ $COUNTER -ge $TIMEOUT ]; then
                  echo "\tTimed Out"
-                 break
+                 exit 1
                fi
                ;;
           esac
         done
-
-        echo $! > $PID_FILE;
     fi
 }
 
