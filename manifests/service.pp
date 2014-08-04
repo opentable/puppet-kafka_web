@@ -20,7 +20,10 @@ class kafka_web::service(
 
   service { 'kafka-web':
     ensure => 'running',
-    require => File['/etc/init.d/kafka-web']
+    require => [
+      File['/etc/init.d/kafka-web'],
+      Play::Application['kafka-web-console']
+    ]
   }
 
 }
