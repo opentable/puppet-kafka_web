@@ -2,15 +2,19 @@
 require 'net/http'
 require 'json'
 
-url = URI.parse('http://vpcqa-logkafka-web-01.qasql.opentable.com:9000/zookeepers.json/ALL')
-req = Net::HTTP::Get.new(url.to_s)
-res = Net::HTTP.start(url.host, url.port) {|http|
-  http.request(req)
-}
+begin
+  url = URI.parse('http://vpcqa-logkafka-web-01.qasql.opentable.com:9000/zookeepers.json/ALL')
+  req = Net::HTTP::Get.new(url.to_s)
+  res = Net::HTTP.start(url.host, url.port) {|http|
+    http.request(req)
+  }
+  zookeepers = JSON.parse(res.body)
 
-zookeepers = JSON.parse(res.body)
-
-zookeepers.each do |zk| -%>
-{ <%- zk.sort.map do |k,v| -%>"<%= k -%>":"<%= v -%>",<%- end -%> }, 
+  zookeepers.each do |zk| -%>
+  { <%- zk.sort.map do |k,v| -%>"<%= k -%>":"<%= v -%>",<%- end -%> }, 
 <%-
-end -%>
+  end 
+rescue Errno::ECONNREFUSED
+  
+end
+-%>
