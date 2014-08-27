@@ -10,6 +10,9 @@ res = Net::HTTP.start(url.host, url.port) {|http|
 
 zookeepers = JSON.parse(res.body)
 
-zookeepers.each do |zk|-%>
-<%= zk %>
-<%- end -%>
+zookeepers.sort.each do |zk|
+  zk.sort.each |k,v| -%>
+    <%= k %>:<%= v %>
+<%-
+  end 
+end -%>
