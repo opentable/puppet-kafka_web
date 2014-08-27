@@ -12,9 +12,7 @@ zookeepers = JSON.parse(res.body)
 
 zookeepers.each do |zk| -%>
 {
-<%- zk.sort.map do |k,v| -%>
-    "<%= k -%>":"<%= v -%>",
-<%- end -%>
-} 
+<%- zk.sort.map do |k,v| -%>"<%= k -%>":"<%= v -%>",<%- end -%>
+}, 
 <%-
 end -%>
