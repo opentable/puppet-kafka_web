@@ -13,4 +13,6 @@ class kafka_web::params {
   $java_opts = '-DapplyEvolutions.default=true'
 
   $play_home = '/usr/share/activator'
+  
+  $zookeepers = {}
 }

@@ -9,7 +9,8 @@ class kafka_web(
   $db_default_password = $kafka_web::params::db_default_password,
   $jdbc_file = $kafka_web::params::jdbc_file,
   $java_opts = $kafka_web::params::java_opts,
-  $play_home = $kafka_web::params::play_home
+  $play_home = $kafka_web::params::play_home,
+  $zookeepers = $kafka_web::params::zookeepers
 ) inherits kafka_web::params {
 
   class { 'kafka_web::install': } ->
