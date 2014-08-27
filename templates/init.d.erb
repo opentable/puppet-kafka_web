@@ -18,7 +18,7 @@ start() {
         cd $KAFKA_WEB_HOME
         exec $DAEMON $DAEMON_OPTS start >> $LOG_FILE 2>&1 &
 
-        TIMEOUT=$((`date +%s`+60))
+        TIMEOUT=$((`date +%s`+180))
         COUNTER=`date +%s`
         while true; do
           line=$(tail -n1 $LOG_FILE)
