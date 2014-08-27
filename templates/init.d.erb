@@ -32,6 +32,11 @@ start() {
                echo "\tKilled"
                exit 1
                ;;
+             *"Type Ctrl+D"*)
+               echo "\tStarted"
+               echo $! > $PID_FILE
+               exit 0
+               ;;
              *)
                if [ $COUNTER -ge $TIMEOUT ]; then
                  echo "\tTimed Out"
