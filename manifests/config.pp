@@ -28,5 +28,5 @@ class kafka_web::config(
     require => Service['kafka-web']
   }
   
-  create_resource('kafka_web::zookeeper', $zookeepers)
+  create_resources('kafka_web::zookeeper', $zookeepers)
 }
