@@ -16,7 +16,7 @@ start() {
         exit 0
     else
         cd $KAFKA_WEB_HOME
-        exec $DAEMON $DAEMON_OPTS start >> $LOG_FILE 2>&1 &
+        exec nohup $DAEMON $DAEMON_OPTS start >> $LOG_FILE 2>&1
 
         TIMEOUT=$((`date +%s`+180))
         COUNTER=`date +%s`
@@ -57,6 +57,7 @@ stop() {
   else
     kill -9 `cat $PID_FILE`;
     rm -f $PID_FILE;
+    rm -rf $KAFKA_WEB_HOME/target
     echo "\n$NAME stopped"
     exit 0
   fi
