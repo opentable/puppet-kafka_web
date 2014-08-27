@@ -24,8 +24,7 @@ class kafka_web::config(
   
   file { "${install_dir}/conf/zookeepers.conf":
     ensure  => present,
-    content => template('kafka_web/zookeepers.erb'),
-    require => Service['kafka-web']
+    content => template('kafka_web/zookeepers.erb')
   }
   
   create_resources('kafka_web::zookeeper', $zookeepers)
