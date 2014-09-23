@@ -27,5 +27,5 @@ class kafka_web::config(
   #  content => template('kafka_web/zookeepers.erb')
   #}
   
-  create_resources('kafka_web::zookeeper', $zookeepers)
+  #create_resources('kafka_web::zookeeper', $zookeepers)
 }
